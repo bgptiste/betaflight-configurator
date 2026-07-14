@@ -521,7 +521,7 @@ export default defineComponent({
             return { qualityColor, stars };
         };
 
-        const gnssArray = ["GPS", "SBAS", "Galileo", "BeiDou", "IMES", "QZSS", "Glonass"];
+        const gnssArray = ["GPS", "SBAS", "Galileo", "BeiDou", "IMES", "QZSS", "Glonass", "NavIC"];
         const qualityArray = [
             "gnssQualityNoSignal",
             "gnssQualitySearching",
@@ -546,12 +546,12 @@ export default defineComponent({
             const channels = gpsData?.chn?.length || 0;
 
             if (channels > 16) {
-                const maxUIChannels = 32;
-                const channelCount = Math.min(maxUIChannels, channels) || 32;
+                const maxUIChannels = 50;
+                const channelCount = Math.min(maxUIChannels, channels) || 50;
 
                 for (let i = 0; i < channelCount; i++) {
                     const gnssId = gpsData.chn[i];
-                    if (gnssId >= 7) {
+                    if (gnssId >= 8) {
                         rows.push({ gnss: "-", satId: null, satUsed: false, cno: 0, quality: "", qualityClass: "" });
                         continue;
                     }
@@ -587,7 +587,7 @@ export default defineComponent({
                     });
                 }
 
-                for (let i = channels; i < 32; i++) {
+                for (let i = channels; i < 50; i++) {
                     rows.push({ gnss: "-", satId: "-", satUsed: false, cno: 0, quality: "", qualityClass: "" });
                 }
             }
