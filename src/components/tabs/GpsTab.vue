@@ -376,16 +376,22 @@ export default defineComponent({
         });
 
         const ubloxIndex = computed(() => gpsProtocols.value.indexOf("UBLOX"));
+        const septentrioIndex = computed(() => gpsProtocols.value.indexOf("SEPTENTRIO"));
         const mspIndex = computed(() => gpsProtocols.value.indexOf("MSP"));
 
         const ubloxSelected = computed(() => gpsConfig.provider === ubloxIndex.value);
+        const septentrioSelected = computed(() => gpsConfig.provider === septentrioIndex.value);
         const mspSelected = computed(() => gpsConfig.provider === mspIndex.value);
-        const showAutoConfig = computed(() => ubloxSelected.value);
+        const showAutoConfig = computed(() => ubloxSelected.value || septentrioSelected.value);
         const showAutoBaud = computed(
             () => (ubloxSelected.value || mspSelected.value) && semver.lt(apiVersion.value, API_VERSION_1_46),
         );
-        const showUbloxGalileo = computed(() => showAutoConfig.value && gpsConfig.auto_config === 1);
-        const showUbloxSbas = computed(() => showAutoConfig.value && gpsConfig.auto_config === 1);
+        const showUbloxGalileo = computed(
+            () => ubloxSelected.value && showAutoConfig.value && gpsConfig.auto_config === 1,
+        );
+        const showUbloxSbas = computed(
+            () => ubloxSelected.value && showAutoConfig.value && gpsConfig.auto_config === 1,
+        );
         const showPositionalDop = computed(() => semver.gte(apiVersion.value, API_VERSION_1_46));
 
         const autoBaudChecked = computed({
